@@ -1,0 +1,140 @@
+
+Documentação Completa e Detalhada para o Código de Criptografia Homomórfica usando Paillier
+Descrição Geral
+Este código implementa a criptografia e descriptografia de strings usando o algoritmo de criptografia homomórfica Paillier. A criptografia homomórfica permite que operações sejam realizadas sobre dados criptografados sem a necessidade de descriptografá-los, o que é útil em cenários onde a privacidade dos dados é fundamental.
+
+O algoritmo de Paillier utiliza chaves assimétricas, ou seja, uma chave pública é usada para criptografar os dados e uma chave privada é usada para descriptografá-los.
+
+Funcionalidade
+Criptografia de uma String: O código criptografa cada caractere da string de entrada, convertendo-o em seu valor numérico (ASCII) e criptografando-o utilizando a chave pública gerada.
+
+Descriptografia de uma String: Cada caractere criptografado é descriptografado de volta para seu valor ASCII original usando a chave privada correspondente. Depois, o valor numérico é convertido de volta para o caractere.
+
+Requisitos do Sistema
+Biblioteca GMP:
+
+O código utiliza a biblioteca GMP (GNU Multiple Precision Arithmetic Library) para manipular grandes números.
+Essa biblioteca deve estar instalada no sistema.
+Instalação no Ubuntu/Debian:
+
+bash
+Copiar código
+sudo apt-get install libgmp-dev
+Biblioteca Paillier:
+
+O código utiliza a biblioteca libpaillier, uma implementação do algoritmo de criptografia homomórfica de Paillier. Ela deve estar instalada para que as funções de criptografia e descriptografia sejam usadas corretamente.
+Instalação da Biblioteca Paillier: A biblioteca pode ser encontrada no GitHub.
+
+Passos para instalar:
+
+bash
+Copiar código
+git clone https://github.com/mheily/libpaillier.git
+cd libpaillier
+make
+sudo make install
+Compilador de C:
+
+Um compilador C como gcc deve estar disponível no sistema.
+Instalação no Ubuntu/Debian:
+
+bash
+Copiar código
+sudo apt-get install gcc
+Sistema Operacional:
+
+O código foi desenvolvido para rodar em sistemas Unix-like (Linux ou macOS), pois depende de um arquivo especial (/dev/urandom) para a geração de números aleatórios.
+Como Compilar o Código
+O código deve ser compilado com as seguintes opções, incluindo as bibliotecas GMP e Paillier:
+
+bash
+Copiar código
+gcc -o paillier_example paillier_example.c -lgmp -lpaillier
+Execução do Programa
+Após compilar o código, execute o programa:
+
+bash
+Copiar código
+./paillier_example
+O programa solicitará uma string do usuário, que será criptografada e posteriormente descriptografada.
+
+Exemplo de entrada:
+
+typescript
+Copiar código
+Digite uma string para criptografar: Paillier
+String descriptografada: Paillier
+Componentes do Código
+Função paillier_get_rand_devurandom
+
+Objetivo: Gera números aleatórios seguros utilizando o arquivo /dev/urandom.
+Parâmetros:
+buf: Um buffer para armazenar os bytes gerados.
+len: O tamanho (em bytes) de números aleatórios a serem gerados.
+Operação: Abre /dev/urandom, lê len bytes e armazena no buf. Se houver erro ao abrir o arquivo, o programa é encerrado.
+Função encrypt_string
+
+Objetivo: Criptografa uma string, caractere por caractere.
+Parâmetros:
+input: A string de entrada que será criptografada.
+pub: Chave pública usada para a criptografia.
+Retorno: Retorna um array de ponteiros para paillier_ciphertext_t, representando os caracteres criptografados.
+Operação:
+Converte cada caractere para seu valor ASCII.
+Usa a função paillier_enc para criptografar esse valor.
+Armazena o ciphertext resultante em um array.
+Função decrypt_string
+
+Objetivo: Descriptografa os dados criptografados e reconstrói a string original.
+Parâmetros:
+enc_data: O array de dados criptografados.
+len: O comprimento da string original.
+pub: Chave pública.
+prv: Chave privada usada para a descriptografia.
+Retorno: Retorna a string descriptografada.
+Operação:
+Usa a função paillier_dec para descriptografar cada caractere.
+Converte o valor numérico de volta para o caractere correspondente.
+Função main
+
+Objetivo: Controla o fluxo do programa.
+Operações:
+Gera as chaves pública e privada com 512 bits.
+Solicita ao usuário uma string.
+Criptografa a string e, em seguida, a descriptografa.
+Exibe a string descriptografada e libera a memória alocada.
+Explicações Adicionais
+Geração de Chaves:
+
+A função paillier_keygen gera um par de chaves pública e privada. A chave pública é usada para criptografia, enquanto a privada é usada para descriptografia.
+Criptografia Homomórfica:
+
+A criptografia homomórfica permite que operações matemáticas sejam realizadas sobre dados criptografados. Embora este código apenas criptografe e descriptografe dados, o esquema Paillier é capaz de realizar somas em dados criptografados sem precisar descriptografá-los.
+Memória e Segurança:
+
+Todo dado alocado dinamicamente é liberado no final do programa, evitando vazamentos de memória.
+O uso de /dev/urandom garante que a aleatoriedade usada na geração de chaves e no processo de criptografia seja segura.
+Tamanho da Chave:
+
+O tamanho de 512 bits foi escolhido para este exemplo, mas para ambientes de produção, recomenda-se o uso de chaves com tamanhos maiores, como 1024 bits ou 2048 bits, para garantir um nível mais elevado de segurança.
+Exemplo de Uso
+Aqui está um exemplo simples de execução do programa:
+
+shell
+Copiar código
+$ ./paillier_example
+Digite uma string para criptografar: HelloWorld
+String descriptografada: HelloWorld
+Possíveis Melhorias Futuras
+Criptografia de Arquivos:
+
+Este código pode ser estendido para criptografar e descriptografar arquivos inteiros, em vez de apenas strings.
+Tamanho da Chave Variável:
+
+Permitir que o usuário escolha o tamanho da chave durante a execução do programa para personalizar o nível de segurança.
+Operações Homomórficas:
+
+Implementar operações homomórficas como somas e multiplicações diretamente sobre os dados criptografados sem precisar descriptografá-los.
+Interface Gráfica:
+
+Adicionar uma interface gráfica (GUI) para facilitar a interação do usuário.
